@@ -1,20 +1,21 @@
 package homework1.src;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
-public class TicketProcessor {
+public class TicketProcessorArray {
     public static void main(String[] args) {
-       
+        
         long start = System.nanoTime(); // start testing runtime
-        processTicketsLinkedList();
+        processTicketsArrayList();
         long end = System.nanoTime(); // end testing runtime
         System.out.println("Run time was " + (end - start) / 1000000.0 + " milliseconds."); // print runtime
+
     }
 
-    public static void processTicketsLinkedList() {
+    public static void processTicketsArrayList() {
 
-        LinkedList<String> ticketQueue = new LinkedList<>();
+        ArrayList<String> ticketQueue = new ArrayList<>();
 
         // Uncomment the queue length you want to test with
         // createShortQueue(ticketQueue);
