@@ -24,7 +24,7 @@ public class TicketProcessorArray {
         
         while (!ticketQueue.isEmpty()) {
             // grab the first item in the list
-            String currentTicket = ticketQueue.remove(0); 
+            String currentTicket = ticketQueue.remove(ticketQueue.size() - 1); 
             
             System.out.println("Processing: " + currentTicket);
 
@@ -34,15 +34,15 @@ public class TicketProcessorArray {
     }
 
     public static void createShortQueue(List<String> queue) {
-        // feel free to change the number of tickets here to test different queue sizes
-        for (int i = 1; i <= 10; i++) {
+
+        for (int i = 10; i > 0; i--) {
             queue.add("Ticket #" + i);
         }
     }
 
     public static void createLongQueue(List<String> queue) {
         // feel free to change the number of tickets here to test different queue sizes
-        for (int i = 1; i <= 50000; i++) {
+        for (int i = 50000; i > 0; i--) {
             queue.add("Ticket #" + i);
         }
     }

@@ -15,7 +15,10 @@ public class JavierMergeSort {
             input[i] = rand.nextInt(5000);
         }
 
+        long start = System.nanoTime(); // start testing runtime
         mergeSort(input);
+        long end = System.nanoTime(); // end testing runtime
+        System.out.println("Run time was " + (end - start) / 1000000.0 + " milliseconds."); // print runtime
 
     }
 
