@@ -78,8 +78,4 @@ public class FindFirstInstance {
         grid[3999][3999] = 5;
         return grid;
     }
-
-
-
-
 }

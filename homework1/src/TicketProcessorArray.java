@@ -18,8 +18,8 @@ public class TicketProcessorArray {
         ArrayList<String> ticketQueue = new ArrayList<>();
 
         // Uncomment the queue length you want to test with
-        // createShortQueue(ticketQueue);
-        createLongQueue(ticketQueue);
+        createShortQueue(ticketQueue);
+        // createLongQueue(ticketQueue);
 
         
         while (!ticketQueue.isEmpty()) {
@@ -35,7 +35,7 @@ public class TicketProcessorArray {
 
     public static void createShortQueue(List<String> queue) {
 
-        for (int i = 10; i > 0; i--) {
+        for (int i = 50; i > 0; i--) {
             queue.add("Ticket #" + i);
         }
     }

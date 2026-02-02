@@ -45,20 +45,26 @@ C: O(n*m), Ω(1) where n is rows and m is columns
 D: O(n*m), Ω(n*m) where n is rows and m is columns
 
 ## When measuring actual runtime, does one of the snippets run faster than the other? In what situations? Why do you think this is the case?
-C run faster than D in a situation that the target is not in the last row and last column. It is because C immediately break when target is found. D will continue looping all the elements, even though the target is found and saved.
+Based on the actual runtimes, C (6.1 ms) runs faster than D (6.7 ms) for getGridOne where the target is at the start. For getGridTwo (where the target is at the end), C (6.9 ms) and D (6.8 ms) have similar runtimes. C (findFirstInstanceOne) runs faster than D (findFirstInstanceTwo) when the target is located early in the grid.
+
+This is because C uses the break keyword to stop searching immediately after finding the target, while D forces to check every remaining element even after the target is found.
 
 ## What else do you notice about the reported runtime? Is it 100% consistent every time you run it?
-It's not 100% consistent. The runtime varied a little for each time and the runtime becomes smaller, which means faster, as I ran.
+The runtime is not 100% consistent; it varies slightly with each run. Notably, the runtime tends to decrease (get faster) after the first few runs. It's due to Java's compiler automatically optimizes frequently used codes and executes faster.
 
 # Part 3:
 ## Before you make any changes, explain whether you think a LinkedList or an ArrayList makes more sense in this instance. Which do you think will be faster? Why?
 A LinkedList makes more sense and is faster for Suho’s ticket processor, because removing the next ticket from the front is O(1) with a LinkedList but O(n) with an ArrayList given that it requires shifting elements. An ArrayList can be good if it requires frequent index-based access to the tickets.   
 
 ## When measuring actual runtime, is the LinkedList version Suho wrote, or your ArrayList version faster? Does this change when the list size is small versus when it is very large?
-When list size is small (10), runtime of LinkedList is around 7.3 milliseconds on average and runtime of ArrayList is around 7.6 milliseconds on average. Although LinkedList is slightly faster, the runtime is similar to ArrayList. When list size is very large (50000), runtime of LinkedList is around 450 milliseconds on average and runtime of ArrayList is around 470 milliseconds on average. LinkedList is faster than ArrayList.
+When list size is small (50), runtime of LinkedList is around 7.8 ms on average and runtime of ArrayList is around 7.6 ms on average. ArrayList is slightly faster. 
+
+When list size is very large (50000), runtime of LinkedList is around 450 ms on average and runtime of ArrayList is around 470 ms on average. LinkedList is faster than ArrayList.
 
 ## If you ignore queue creation times, does that affect which ticket processor version is faster?
-Ignoring queue creation time can slightly affect results for small queues, where creation time is a large fraction of runtime. However, for large queues, the runtime is dominated by ticket removal, and the LinkedList implementation remains faster due to O(1) front removals compared to O(n) removals in an ArrayList.
+Ignoring queue creation time can affect results for small queues, where creation time is a large fraction of runtime. LinkedList runs faster due to O(1) front removals compared to O(n) removals in an ArrayList.
+
+For large queues, the runtime is dominated by ticket removal, and the LinkedList remains faster.
 
 ## Write a paragraph or two in the style of a technical report (think about – how would I write this professionally if I needed to explain my findings to my manager?).
 Your report should answer the following questions:
@@ -66,13 +72,13 @@ Your report should answer the following questions:
 * Which implementation do you suggest should be used? Are there certain situations that might call for the other approach?
 * How does the theoretical time complexity compare with your findings?
 
-In this experiment, I evaluated two implementations of a ticket processing system: one using a LinkedList and the other using an ArrayList. The main lesson from this experience is that data structure choice must be driven by the specific usage pattern. Although both structures support constant-time insertion, their removal costs differ fundamentally based on how they are used. In a standard queue workflow where tickets are removed from the front, a LinkedList offers O(1) removal, whereas a standard ArrayList requires O(n) due to element shifting. However, I learned that by optimizing the ArrayList implementation, specifically by loading data in reverse and removing from the end, we can achieve O(1) removal time, effectively matching the performance of a LinkedList. 
+In this experiment, I evaluated two implementations of a ticket processing system: one using a LinkedList and the other using an ArrayList. The main lesson from this experience is that data structure choice must be driven by the specific usage pattern. Although both structures support constant-time insertion, their removal costs differ fundamentally based on how they are used. In a standard queue workflow where tickets are removed from the front, a LinkedList offers O(1) removal, whereas a standard ArrayList requires O(N) due to element shifting. However, I learned that by optimizing the ArrayList implementation—specifically by loading data in reverse and removing from the end, we can achieve O(1) removal time, effectively matching the performance of a LinkedList. 
 
-Measured runtimes confirmed that the LinkedList and the optimized ArrayList share similar performance. For small queues (size 10), runtimes were negligible across the board: the LinkedList averaged 7.3 ms, the standard ArrayList 7.7 ms, and the optimized ArrayList 7.0 ms. For large queues (size 50,000), the distinction became clearer. The standard ArrayList lagged slightly at approximately 470 ms due to the shifting overhead. In contrast, the LinkedList averaged 450 ms, and the optimized ArrayList achieved parity at 449 ms.
+Measured runtimes supported the Big O analaysis. For small queues (size 50), because the overhead of creating LinkedList is significant, the standard ArrayList (averaged 7.6 ms) slightly outperforming the LinkedList at 7.8 ms. However, as the data size grew, the efficiency of removal became the dominant factor. For large queues (size 50,000), the LinkedList averaged 450 ms, outperforming the standard ArrayList (470 ms). Furthermore, the optimized ArrayList (removing from the end) achieved similar runtime with the LinkedList at approximately 449 ms.
 
-For Suho’s ticket processor, I recommend using the LinkedList implementation. While the optimized ArrayList is technically just as fast, it requires treating the list as a Stack (Last-In-First-Out) to avoid the cost of removing from front. This creates a risk of misuse if the data isn't loaded in reverse. The LinkedList naturally supports First-In-First-Out queue behavior, making it the more robust and maintainable choice for this specific task. An ArrayList would be the superior choice only in scenarios requiring frequent index-based access rather than sequential processing.
+For Suho’s ticket processor, I recommend using the LinkedList implementation. While the optimized ArrayList matched the LinkedList's speed, it requires treating the list as a Stack (Last-In-First-Out) to avoid the cost of removing from front. This conflicts with what a ticket tracking system's purpose (First-In-First-Out), creating a risk of misuse if the data isn't loaded in reverse. The LinkedList naturally supports First-In-First-Out queue behavior, making it the more robust and maintainable choice for this specific task. An ArrayList would be the superior choice only in scenarios requiring frequent index-based access rather than sequential processing.
 
-Overall, the findings align with theoretical expectations. The experiment demonstrated that when the O(n) shifting cost is removed from the ArrayList, its performance converges with the O(1) LinkedList. This reinforces the importance of analyzing not just the data structure itself, but exactly how it will be accessed and modified in production.
+Overall, the findings align with theoretical expectations. The experiment showed that while overhead like object creation affects small datasets, the difference between O(1) and O(N) complexity is what really drives performance for large datasets. This confirms that we need to analyze not just the data structure itself, but exactly how it is being used and whether it fits the problem naturally.
 
 # Part 4
 ## What are the Big O and Big Ω times for Javier's algorithm? What are the Big O and Big Ω for space use?
